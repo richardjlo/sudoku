@@ -30,4 +30,14 @@ describe('checkValue', function() {
       checkRow = checkValue.checkRow(board, 2, 8);
       expect(checkRow).to.be.false;
     });
+
+    it('should check that each value in the column ' +
+      'does not equal the input value', function() {
+        // No match. Return true.
+        let checkCol = checkValue.checkCol(board, 0, 8);
+        expect(checkCol).to.be.true;
+        // Match found. Return false.
+        checkCol = checkValue.checkCol(board, 2, 4);
+        expect(checkCol).to.be.false;
+      });
 });
