@@ -1,10 +1,11 @@
 'use strict';
 
-const expect = require('chai').expect;
+const Chai = require('chai');
+const expect = Chai.expect;
+const checkValue = require('./check-value.js');
 
-describe('check-value', function() {
+describe('checkValue', function() {
     it('should exist', function() {
-        const checkValue = require('./check-value.js');
         expect(checkValue).to.not.be.undefined;
     });
 });
