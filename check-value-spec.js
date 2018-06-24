@@ -2,7 +2,7 @@
 
 const Chai = require('chai');
 const expect = Chai.expect;
-const solver = require('./check-value.js');
+const solver = require('./solver.js');
 
 let board = [
   [0, 9, 0, 0, 0, 0, 0, 0, 6],
