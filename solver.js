@@ -57,7 +57,6 @@ module.exports.checkSquare = function(board, row, col, value) {
   return true;
 };
 
-
 module.exports.saveEmptyPositions = function(board) {
   let emptyPositions = [];
   for (let i = 0; i < board.length; i++) {
@@ -68,4 +67,56 @@ module.exports.saveEmptyPositions = function(board) {
     }
   }
   return emptyPositions;
+};
+
+module.exports.solvePuzzle = function(board, emptyPositions) {
+  // Variables to track our position in the solver
+  let limit = 9;
+  let row;
+  let column;
+  let value;
+  let found;
+
+  for (let i = 0; i < emptyPositions.length;) {
+    let emptyPosition = emptyPositions[i];
+    row = emptyPosition[0];
+    column = emptyPosition[1];
+    // Try the next value
+    value = board[row][column] + 1;
+    // Was a valid number found?
+    found = false;
+    // Keep trying new values until either the limit
+    // was reached or a valid value was found
+    while (!found && value <= limit) {
+      // If a valid value is found, mark found true,
+      // set the position to the value, and move to the
+      // next position
+      if (this.checkValue(board, row, column, value)) {
+        found = true;
+        board[row][column] = value;
+        i++;
+      } else {
+        value++;
+      }
+    }
+    // If no valid value was found and the limit was
+    // reached, move back to the previous position
+    if (!found) {
+      board[row][column] = 0;
+      i--;
+    }
+  }
+
+  // A solution was found! Log it
+  board.forEach(function(row) {
+    console.log(row.join());
+  });
+
+  // return the solution
+  return board;
+};
+
+module.exports.solveSudoku = function(board) {
+  let emptyPositions = this.saveEmptyPositions(board);
+  return this.solvePuzzle(board, emptyPositions);
 };

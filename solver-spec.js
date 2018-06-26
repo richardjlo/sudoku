@@ -4,7 +4,7 @@ const Chai = require('chai');
 const expect = Chai.expect;
 const solver = require('./solver.js');
 
-let board = [
+const board = [
   [0, 9, 0, 0, 0, 0, 0, 0, 6],
   [0, 0, 0, 9, 6, 0, 4, 8, 5],
   [0, 0, 0, 5, 8, 1, 0, 0, 0],
@@ -39,6 +39,10 @@ describe('#checkValue', function() {
     // No match. Return true.
     checkValue = solver.checkValue(board, 3, 5, 7);
     expect(checkValue).to.be.true;
+
+    // Match found. Return false.
+    checkValue = solver.checkValue(board, 0, 0, 1);
+    expect(checkValue).to.be.false;
   });
 });
 
@@ -86,11 +90,11 @@ describe('#checkSquare', function() {
     });
 });
 
-  describe('#saveEmptyPositions', function() {
-    it('should save the empty board positions into an array', function() {
-      let emptyPositions;
+describe('#saveEmptyPositions', function() {
+  it('should save the empty board positions into an array', function() {
+    let emptyPositions;
 
-      let expectedPositions = [
+    let expectedPositions = [
       [0, 0], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [1, 0], [1, 1],
       [1, 2], [1, 5], [2, 0], [2, 1], [2, 2], [2, 6], [2, 7], [2, 8], [3, 0],
       [3, 1], [3, 3], [3, 4], [3, 5], [3, 6], [3, 7], [3, 8], [4, 4], [4, 5],
@@ -99,9 +103,83 @@ describe('#checkSquare', function() {
       [8, 2], [8, 3], [8, 5], [8, 6], [8, 7], [8, 8],
     ];
 
-      // Cell is empty. Return true.
-      emptyPositions = solver.saveEmptyPositions(board);
-      expect(emptyPositions).to.have.lengthOf(51);
-      expect(emptyPositions).to.eql(expectedPositions);
-    });
+    // Cell is empty. Return true.
+    emptyPositions = solver.saveEmptyPositions(board);
+    expect(emptyPositions).to.have.lengthOf(51);
+    expect(emptyPositions).to.eql(expectedPositions);
   });
+});
+
+describe('#solvePuzzle', function() {
+  let board = [
+    [0, 9, 0, 0, 0, 0, 0, 0, 6],
+    [0, 0, 0, 9, 6, 0, 4, 8, 5],
+    [0, 0, 0, 5, 8, 1, 0, 0, 0],
+    [0, 0, 4, 0, 0, 0, 0, 0, 0],
+    [5, 1, 7, 2, 0, 0, 9, 0, 0],
+    [6, 0, 2, 0, 0, 0, 3, 7, 0],
+    [1, 0, 0, 8, 0, 4, 0, 2, 0],
+    [7, 0, 6, 0, 0, 0, 8, 1, 0],
+    [3, 0, 0, 0, 9, 0, 0, 0, 0],
+  ];
+
+  let expectedSolution = [
+    [8, 9, 5, 7, 4, 2, 1, 3, 6],
+    [2, 7, 1, 9, 6, 3, 4, 8, 5],
+    [4, 6, 3, 5, 8, 1, 7, 9, 2],
+    [9, 3, 4, 6, 1, 7, 2, 5, 8],
+    [5, 1, 7, 2, 3, 8, 9, 6, 4],
+    [6, 8, 2, 4, 5, 9, 3, 7, 1],
+    [1, 5, 9, 8, 7, 4, 6, 2, 3],
+    [7, 4, 6, 3, 2, 5, 8, 1, 9],
+    [3, 2, 8, 1, 9, 6, 5, 4, 7],
+  ];
+
+  let solution;
+  let emptyPositions = solver.saveEmptyPositions(board);
+  solution = solver.solvePuzzle(board, emptyPositions);
+
+  it('should exist', function() {
+      expect(solver.solvePuzzle).to.not.be.undefined;
+  });
+
+  it('should solve sudoku puzzle', function() {
+    expect(solution).to.eql(expectedSolution);
+  });
+});
+
+describe('#solveSudoku', function() {
+  let board = [
+    [0, 9, 0, 0, 0, 0, 0, 0, 6],
+    [0, 0, 0, 9, 6, 0, 4, 8, 5],
+    [0, 0, 0, 5, 8, 1, 0, 0, 0],
+    [0, 0, 4, 0, 0, 0, 0, 0, 0],
+    [5, 1, 7, 2, 0, 0, 9, 0, 0],
+    [6, 0, 2, 0, 0, 0, 3, 7, 0],
+    [1, 0, 0, 8, 0, 4, 0, 2, 0],
+    [7, 0, 6, 0, 0, 0, 8, 1, 0],
+    [3, 0, 0, 0, 9, 0, 0, 0, 0],
+  ];
+
+  let expectedSolution = [
+    [8, 9, 5, 7, 4, 2, 1, 3, 6],
+    [2, 7, 1, 9, 6, 3, 4, 8, 5],
+    [4, 6, 3, 5, 8, 1, 7, 9, 2],
+    [9, 3, 4, 6, 1, 7, 2, 5, 8],
+    [5, 1, 7, 2, 3, 8, 9, 6, 4],
+    [6, 8, 2, 4, 5, 9, 3, 7, 1],
+    [1, 5, 9, 8, 7, 4, 6, 2, 3],
+    [7, 4, 6, 3, 2, 5, 8, 1, 9],
+    [3, 2, 8, 1, 9, 6, 5, 4, 7],
+  ];
+
+  it('should exist', function() {
+      expect(solver.solveSudoku).to.not.be.undefined;
+  });
+
+  it('should find a solution to the puzzle string passed in', function() {
+    let solution = solver.solveSudoku(board);
+
+    expect(solution).to.eql(expectedSolution);
+  });
+});
